@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { TwitterTweetEmbed } from "react-twitter-embed";
+import "./App.css";
 
 function App() {
+  const [tweets, setTweets] = useState([]);
+  useEffect(() => {
+    axios
+      .get(
+        "http://ec2-13-58-153-32.us-east-2.compute.amazonaws.com:8080/sentiment"
+      )
+      .then((res) => setTweets(res.data))
+      .catch((err) => console.log(err));
+  }, []);
+
+  const getId = (link) => {
+    const arr = link.split("/");
+    return arr[arr.length - 1];
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {tweets.map((tweet, i) => (
+        <TwitterTweetEmbed
+          key={"tweet_" + i}
+          tweetId={getId(tweet.link)}
+        />
+      ))}
     </div>
   );
 }
