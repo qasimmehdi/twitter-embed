@@ -10,7 +10,6 @@ ENV PATH /app/node_modules/.bin:$PATH
 # install app dependencies
 COPY package.json ./
 #COPY package-lock.json ./
-RUN npm install -g yarn
 RUN yarn
 RUN yarn add react-scripts@3.4.1 -g --silent
 
